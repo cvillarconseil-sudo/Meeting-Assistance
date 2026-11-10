@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "meeting-assistance"
+version = "0.1.0"
+description = "Enregistrement, transcription et suivi de réunions, 100 % local"
+requires-python = ">=3.10"
+# Licences vérifiées : numpy BSD-3, soundfile BSD-3, soundcard BSD-3, faster-whisper MIT
+dependencies = [
+    "numpy",
+    "soundfile",
+    "soundcard",
+    "faster-whisper>=1.0",
+    # PyAV >= 16 : faster-whisper 1.2.1 appelle av.open(metadata_errors=...), argument supprimé -> TypeError
+    "av>=11,<16",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+meeting = "meeting.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: test réel (télécharge le modèle tiny, voix Windows) ; lancer avec MEETING_IT=1"]
