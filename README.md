@@ -8,30 +8,48 @@ Chaîne hors-ligne pour prendre une réunion Teams en notes **sans bot et sans e
 > « usage interne / confidentiel »), vérifiez que c'est autorisé.
 
 ## 1. Installation (une fois)
-- Installez **Python 3.10+** (cochez « Add Python to PATH »).
-- Dans un terminal :
+- Installez **Python 3.10+** (cochez « Add Python to PATH »). Vérifiez avec `py -0` ; si plusieurs
+  versions sont installées, utilisez `py -3.12` (ou la plus récente) ci-dessous.
+- Dans un terminal, depuis le dossier du projet :
   ```
-  pip install soundcard soundfile numpy faster-whisper
+  py -3.12 -m venv .venv
+  .venv\Scripts\activate
+  pip install -e .
   ```
+  La commande `meeting` est alors disponible tant que l'environnement est activé.
 - GPU NVIDIA (optionnel) : accélère la transcription. Sinon, le CPU suffit (plus lent que le direct,
   mais parfait pour transcrire **après** la réunion).
 
 ## 2. Enregistrer la réunion
 ```
-python record_meeting.py --out reunion.wav
+meeting devices
+meeting record --out reunion.wav
 ```
 - Capte le **son de Teams** (les autres participants) **+ votre micro**, mixés.
 - Laissez tourner pendant la réunion ; **Ctrl+C** pour arrêter → `reunion.wav`.
+- `meeting devices` liste les haut-parleurs et micros. Si le micro par défaut est refusé
+  (message « format non pris en charge », vu sur un casque Dell HR024), choisissez-en un autre :
+  `meeting record --micro "Microphone Array"` (une partie du nom suffit), ou `--no-mic`.
+- `--duree 60` : arrêt automatique après 60 s (pour un essai).
 - Astuce : montez un peu le volume Teams ; parlez normalement.
 
 ## 3. Transcrire (hors-ligne)
 ```
-python transcribe_local.py reunion.wav --modele large-v3 --langue ca
+meeting transcribe reunion.wav --modele large-v3 --langue ca
 ```
 - `--langue` : `fr`, `es`, `ca` (catalan) — ou omettez pour détection automatique.
-- `--modele` : `medium` (rapide) ou `large-v3` (meilleure qualité).
-- Le modèle se télécharge **au 1er lancement**, puis tout est **hors-ligne**.
+- `--modele` : `medium` (rapide) ou `large-v3` (meilleure qualité) ; `tiny` pour un essai rapide.
+- `--device` : `auto` (défaut), `cpu` ou `cuda`.
+- Le modèle se télécharge **au 1er lancement** (Hugging Face), puis tout est **hors-ligne**.
 - Sortie : `reunion.txt` (horodaté).
+
+## Tests (développement)
+```
+pip install -e ".[test]"
+pytest
+```
+Le test réel (voix de synthèse Windows transcrite par le modèle `tiny`, téléchargé au 1er lancement)
+est désactivé par défaut : `set MEETING_IT=1` puis `pytest -m integration`.
 
 ## 4. Rédiger le compte-rendu
 Deux options :

@@ -6,6 +6,9 @@
 *.ogg
 *.srt
 *.vtt
+# Transcriptions (sortie .txt de « meeting transcribe ») ; seuls les requirements*.txt sont versionnables
+*.txt
+!requirements*.txt
 transcripts/
 comptes-rendus/
 reunions/
@@ -23,3 +26,4 @@ env/
 # Secrets
 .env
 *token*
+*.egg-info/
