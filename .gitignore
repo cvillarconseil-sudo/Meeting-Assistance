@@ -1,0 +1,25 @@
+# Données réelles : ne jamais versionner
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.ogg
+*.srt
+*.vtt
+transcripts/
+comptes-rendus/
+reunions/
+*.sqlite
+*.db
+models/
+*.bin
+*.gguf
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
+.pytest_cache/
+# Secrets
+.env
+*token*
