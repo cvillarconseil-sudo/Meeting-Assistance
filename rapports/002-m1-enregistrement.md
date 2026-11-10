@@ -30,6 +30,7 @@ Sans aucun son joué (10 min, avant correction) : le flux système est bien zér
 - L'alignement acoustique réel (même son entendu dans les deux flux) n'a pas été mesuré : le micro n'entend pas un son joué dans le casque.
 - Le micro du casque Dell est toujours refusé par soundcard (message clair + `--micro`). Changer de bibliothèque n'est plus nécessaire pour la synchronisation.
 - Pas encore testé avec une vraie réunion Teams.
+- **Défaut introduit par le correctif (vu lors de l'essai YouTube, 7 vidéos)** : quand aucune application ne joue de son, le loopback ne livre rien. Au moment où le son reprend, la période de silence en cours (jusqu'à 1 s) n'est pas comptée, ce qui avance le flux système d'au plus 1 s à chaque reprise. On a mesuré −3 248 ppm, soit environ 0,6 s, sur une vidéo de 3 min lancée 2,5 s après le début de l'enregistrement. C'est sans effet sans micro. Avec micro, le décalage peut se cumuler si le son du système s'arrête et reprend souvent. Pendant un appel Teams, le flux reste a priori ouvert, mais ce n'est pas vérifié. Piste de correction : à la reprise, comparer le nombre d'images en attente (`GetCurrentPadding`) au temps écoulé, pour distinguer un retard de livraison d'un vrai silence. **Il faut le corriger avant de fusionner, ou en tâche M1b.**
 
 ## Question
 - Faut-il corriger la dérive (moins de 0,1 s par 30 min mesuré ici), ou la laisser telle quelle ? Je recommande de la laisser.
