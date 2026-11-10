@@ -27,10 +27,19 @@ meeting record --out reunion.wav
 ```
 - Capte le **son de Teams** (les autres participants) **+ votre micro**, mixés.
 - Laissez tourner pendant la réunion ; **Ctrl+C** pour arrêter → `reunion.wav`.
-- `meeting devices` liste les haut-parleurs et micros. Si le micro par défaut est refusé
-  (message « format non pris en charge », vu sur un casque Dell HR024), choisissez-en un autre :
-  `meeting record --micro "Microphone Array"` (une partie du nom suffit), ou `--no-mic`.
+- Pendant l'enregistrement, une ligne affiche chaque seconde le niveau des deux flux
+  (`système -32.0 dB | micro -41.5 dB`). Une **ALERTE** s'affiche si l'un des deux reste
+  silencieux 30 s (micro coupé, mauvais haut-parleur…).
+- `meeting devices` liste les haut-parleurs et micros. Choix explicite (une partie du nom suffit) :
+  `--haut-parleur "Casque"` (son à capter) et `--micro "Microphone Array"`, ou `--no-mic`.
+  Si le micro par défaut est refusé (message « format non pris en charge », vu sur un casque
+  Dell HR024), choisissez-en un autre avec `--micro`.
 - `--duree 60` : arrêt automatique après 60 s (pour un essai).
+- **Écriture au fil de l'eau** : l'audio est écrit sur le disque chaque seconde dans
+  `reunion.pistes.wav` (piste 1 = système, piste 2 = micro). Si le programme ou le PC plante,
+  rien n'est perdu sauf la dernière seconde : `meeting recover reunion.pistes.wav` produit `reunion.wav`.
+  Ce fichier est supprimé après un arrêt normal, sauf avec `--garder-pistes`.
+- À l'arrêt, un bilan indique les échantillons reçus par flux et la dérive d'horloge mesurée.
 - Astuce : montez un peu le volume Teams ; parlez normalement.
 
 ## 3. Transcrire (hors-ligne)
@@ -50,6 +59,7 @@ pytest
 ```
 Le test réel (voix de synthèse Windows transcrite par le modèle `tiny`, téléchargé au 1er lancement)
 est désactivé par défaut : `set MEETING_IT=1` puis `pytest -m integration`.
+La réunion simulée d'une heure (environ 45 s) se saute avec `pytest -m "not slow"`.
 
 ## 4. Rédiger le compte-rendu
 Deux options :
