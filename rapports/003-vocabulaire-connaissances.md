@@ -7,7 +7,7 @@ Demande de Carlos : tester sur davantage de vidéos, récupérer les dictionnair
 - **Lexique ferroviaire** (`data/lexique_ferroviaire.csv`) : 31 concepts (voie, appareils de voie, caténaire, renouvellement, bourrage, sécurité, organisation…), 864 termes en FR, ES, IT, PT, DE, EN, CA et NL, avec une définition en français. Rédigé par l'agent, il ne recopie aucun glossaire tiers.
 - **Transcription guidée** : les termes de la langue détectée sont passés à faster-whisper (`hotwords`), puis les erreurs connues sont corrigées (`data/corrections.csv`). Sur la vidéo ETF, « balaises » et « balais » deviennent « ballast », « voile » devient « voie », « voies ballastes » devient « voie ballast ». Il reste « des prêtes » au lieu de « du fret ».
 - **Base de connaissances** (`meeting kb`) : SQLite et FTS5, hors du dépôt. Elle contient 13 sources, 408 passages horodatés, 8 670 termes (lexique + glossaire ERA) et 12 fiches méthodes rédigées à partir des vidéos. La recherche ignore les accents. Export Markdown.
-- 31 tests passent (5 nouveaux pour la base, 6 pour le vocabulaire).
+- 26 tests rapides passent, dont 11 nouveaux (6 pour le vocabulaire, 5 pour la base). Le test réel et la réunion simulée d'une heure ne sont pas relancés sur cette branche.
 
 ## Vidéos (14 enregistrées, 11 avec parole, transcrites avec le modèle `medium` sur CPU)
 FR : ETF (RVB à Metz), Colas Rail (RER A), plus 3 vidéos sans parole (SNCF Réseau SRZD et BOA, Eiffage TCM 60). BE : Infrabel ×2. CH : FM1Today, SBB (train de travaux). IT : TTV/RFI (FCU), plus GCF sans parole. ES : Azvi (Zafra–Huelva), Adif (appareils de voie par portiques). PT : IP Beira Alta, IP Oeste.
