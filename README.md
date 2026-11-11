@@ -51,6 +51,24 @@ meeting transcribe reunion.wav --modele large-v3 --langue ca
 - `--device` : `auto` (défaut), `cpu` ou `cuda`.
 - Le modèle se télécharge **au 1er lancement** (Hugging Face), puis tout est **hors-ligne**.
 - Sortie : `reunion.txt` (horodaté).
+- **Vocabulaire ferroviaire** (par défaut) : les termes métier de la langue détectée (ballast, traverse,
+  caténaire, bourrage… ; FR, ES, IT, PT, DE, EN, CA, NL) sont fournis au modèle, ce qui corrige par
+  exemple « balaises » → « ballast ». Lexique : `data/lexique_ferroviaire.csv` ; erreurs connues
+  corrigées après coup : `data/corrections.csv`. `--vocabulaire aucun` pour désactiver,
+  `--vocabulaire mon_lexique.csv` pour un autre lexique (même format).
+
+## Base de connaissances (travaux ferroviaires)
+Base SQLite locale, hors du dépôt (`%LOCALAPPDATA%\meeting-assistance\connaissances.sqlite`,
+ou dossier `MEETING_DATA`) : termes, transcriptions horodatées de sources publiques, fiches méthodes.
+```
+meeting kb importer-lexique
+meeting kb importer-era glossary_export.csv
+meeting kb importer-transcription video.txt --titre "…" --url "…" --pays FR --langue fr
+meeting kb importer-methodes fiches.json
+meeting kb chercher bourrage
+meeting kb exporter methodes.md
+meeting kb stats
+```
 
 ## Tests (développement)
 ```
